@@ -1,8 +1,8 @@
-#include "vector.hpp"
-
-#include <sstream>
 #include <cmath>
 #include <iomanip>
+#include <sstream>
+
+#include "vector.hpp"
 
 using namespace VolHacks;
 
@@ -49,15 +49,12 @@ double Vector::operator*(Vector a) {
     return x * a.x + y * a.y;
 }
 
-
-// Return "xxx.xxxxxxxxi yyy.yyyyyyyyj"
 std::string Vector::as_components() {
     std::stringstream ss;
     ss << std::fixed << std::setw(9) << std::setprecision(4) << x << "i " << std::setw(9) << y << "j";
     return ss.str();
 }
 
-//Return "000.0000000 at 000.0000000rad"
 std::string Vector::as_mag_and_radians() {
     double mag = std::sqrt(pow(x,2) + pow(y,2));
     std::stringstream ss;
@@ -66,7 +63,6 @@ std::string Vector::as_mag_and_radians() {
     return ss.str();
 }
 
-//Return "000.0000000 at 000.0000000deg"
 std::string Vector::as_mag_and_degrees() {
     double mag = std::sqrt(pow(x,2) + pow(y,2));
     double angle = std::atan2(y, x) * 180 / M_PI;

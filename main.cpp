@@ -1,19 +1,14 @@
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <fstream>
-#include <map>
 #include <cctype>
+#include <fstream>
 #include <iomanip>
+#include <iostream>
+#include <map>
+#include <sstream>
+#include <string>
 
 #include "vector.hpp"
 
-using std::cout;
-using std::cin;
-
 using namespace VolHacks;
-
-
 
 enum VectorState {
     Component,
@@ -22,30 +17,27 @@ enum VectorState {
     Invalid
 };
 
-
 VectorState parse_create(std::stringstream&, Vector&, char&);
 bool load(std::map<char, Vector>& vectors, std::string fileName);
 void write(std::string fileName, std::map<char, Vector>& vectors);
 
-
-
 int main() {
-    const std::string help = "Commands:\nq - quit\nc - create\nr - remove\nl - list\nw - write\nf - load file\na - assign\n";
+    const std::string help = "Commands:\nq - quit\nc - create\nr - remove\nl - list\nw - write\nf - load file\na - assign\nd - dot product";
     bool error = false;
 
     std::map<char,Vector> vectors;
 
-    cout << "Vector manipulator. Type h for help\n";
+    std::cout << "Vector manipulator. Type h for help\n";
     while (true) {
-        cout << '\n';
+        std::cout << '\n';
         if (error) {
-            cout << "!> ";
+            std::cout << "!> ";
         } else {
-            cout << " > ";
+            std::cout << " > ";
         }
         error = false;
         std::string s;
-        std::getline(cin, s);
+        std::getline(std::cin, s);
         std::stringstream full_command(s);
         char command;
         full_command >> command;
@@ -79,7 +71,7 @@ int main() {
                 break;
             case 'l':
                 for (auto& p : vectors) {
-                    cout << p.first << ": "
+                    std::cout << p.first << ": "
                         << p.second.as_components() << " |"
                         << p.second.as_mag_and_degrees() << '\n';
                 }
@@ -158,8 +150,28 @@ int main() {
 
                 }
                 break;
+            case 'd':
+                if (full_command.get() != ' ') {
+                    error = true;
+                    break;
+                }
+                char a, b;
+                a = full_command.get();
+                b = full_command.get();
+                if (full_command.fail()) {
+                    error = true;
+                    break;
+                }
+                if (std::isupper(a) && (vectors.find(a) != vectors.end()) &&
+                    std::isupper(b) && (vectors.find(b) != vectors.end()))
+                {
+                    std::cout << "Dot Product: " << vectors[a] * vectors[b] << "\n";
+                } else {
+                    error = true;
+                }
+                break;
             case 'h':
-                cout << help;
+                std::cout << help;
                 break;
             default:
                 error = true;
@@ -237,7 +249,6 @@ bool load(std::map<char, Vector>& vectors, std::string fileName) {
 }
 
 void write(std::string fileName, std::map<char, Vector>& vectors) {
-    unsigned int i;
     std::ofstream fout(fileName);
     std::stringstream ss;
     for (auto& p : vectors) {
