@@ -24,14 +24,14 @@ Vector Vector::from_mag_and_radians(double mag, double angle) {
     );
 }
 
-Vector Vector::operator+(Vector& a) {
+Vector Vector::operator+(Vector a) {
     return Vector::from_components(
         x + a.x,
         y + a.y
     );
 }
 
-Vector Vector::operator-(Vector& a) {
+Vector Vector::operator-(Vector a) {
     return Vector::from_components(
         x - a.x,
         y - a.y
@@ -45,7 +45,7 @@ Vector Vector::operator*(double scale) {
     );
 }
 
-double Vector::operator*(Vector& a) {
+double Vector::operator*(Vector a) {
     return x * a.x + y * a.y;
 }
 
@@ -53,7 +53,7 @@ double Vector::operator*(Vector& a) {
 // Return "xxx.xxxxxxxxi yyy.yyyyyyyyj"
 std::string Vector::as_components() {
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(7) << x << "i " << y << "j";
+    ss << std::fixed << std::setw(9) << std::setprecision(4) << x << "i " << std::setw(9) << y << "j";
     return ss.str();
 }
 
@@ -61,7 +61,8 @@ std::string Vector::as_components() {
 std::string Vector::as_mag_and_radians() {
     double mag = std::sqrt(pow(x,2) + pow(y,2));
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(7) << mag << " at " << std::atan2(y, x) << "rad";
+    ss << std::fixed << std::setw(9) << std::setprecision(4)
+        << mag << " " << std::setw(9) << std::atan2(y, x) << "rad";
     return ss.str();
 }
 
@@ -70,6 +71,7 @@ std::string Vector::as_mag_and_degrees() {
     double mag = std::sqrt(pow(x,2) + pow(y,2));
     double angle = std::atan2(y, x) * 180 / M_PI;
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(7) << mag << " at " << angle << "deg";
+    ss << std::fixed << std::setw(9) << std::setprecision(4)
+        << mag << " " << std::setw(9) << angle << "deg";
     return ss.str();
 }
